@@ -1,0 +1,126 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.ke.gson.plugin'
+
+android {
+    /*友盟多渠道打包*/
+    productFlavors {
+        normal {}
+        huawei {}
+        xiaomi {}
+        vivo {}
+        oppo {}
+        yingyongbao {}
+    }
+    //分别进行打包
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        buildConfigField "String", "CHANNEL", "\"${name}\""
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    compileSdkVersion versions.compileSdkVersion
+    defaultConfig {
+
+        applicationId "com.my.view"
+        minSdkVersion versions.minSdkVersion
+        targetSdkVersion versions.targetSdkVersion
+        versionCode 1
+        versionName "1.0.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        resConfigs('zh-rCN')
+        multiDexEnabled true
+//        renderscriptTargetApi 23
+//        renderscriptSupportModeEnabled true
+
+        //必须要保证所有的flavor 都属于同一个维度
+        flavorDimensions "versionCode"
+
+
+//        packagingOptions {
+//            pickFirst 'META-INF/*'
+//        }
+
+        javaCompileOptions { annotationProcessorOptions { includeCompileClasspath = true } }
+
+
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+//            abiFilters 'armeabi', 'x86'
+            abiFilters 'armeabi', 'armeabi-v7a', 'x86', 'mips'
+        }
+
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "App_${versionName}.apk"
+        }
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled true//混淆编译
+            shrinkResources true //移除无用资源
+            zipAlignEnabled true //zipalign优化
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        uat {
+            minifyEnabled true//混淆编译
+            shrinkResources true //移除无用资源
+            zipAlignEnabled true //zipalign优化
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
+        }
+
+
+        debug {
+        }
+    }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            res.srcDirs =
+                    [
+                            //下面这行代码容易遗漏
+                            'src/main/res',
+                            'src/main/res/dialog',
+                            'src/main/res/home',
+                    ]
+        }
+    }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
+}
+
+
+configurations {
+    //这里要排除掉这个包，这个包会与 com.google.guava 冲突，导致编译不过
+    all*.exclude group: 'com.google.guava', module: 'listenablefuture'
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation deps.kotlin.kotlin_jdk
+    compileOnly 'org.glassfish:javax.annotation:10.0-b28'
+
+    api project(':View')
+}

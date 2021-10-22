@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimaryDark">@color/white</color><!-- 状态栏颜色-->
+    <color name="colorPrimary">@color/white</color><!-- 主题颜色-->
+    <color name="colorAccent">#6466E5</color><!--控件选中颜色 -->
+    <color name="colorControlNormal">#DADBE8</color><!-- 控件选未择颜色-->
+    <color name="navigationBarColor">#000000</color>
+    <color name="window_main_background">#F4F4F6</color>
+    <color name="window_sub_background">@color/white</color>
+    <color name="textColor">#000000</color>
+</resources>

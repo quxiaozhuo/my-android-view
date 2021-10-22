@@ -1,0 +1,80 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+
+        kotlin_version = '1.3.72'
+    }
+    ext.versions = [
+            compileSdkVersion : 29,
+            build_tool_version: '29.0.2',
+            minSdkVersion     : 21,
+            targetSdkVersion  : 29,
+            gradle            : "4.0.0",
+            kotlin            : "1.4.21",
+            glide             : "4.10.0"
+    ]
+
+    ext.deps = [
+            dependencies: [
+                    gradle: "com.android.tools.build:gradle:${versions.gradle}"
+            ],
+            kotlin      : [
+                    gradle_plugin    : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
+                    gradle_extensions: "org.jetbrains.kotlin:kotlin-android-extensions:${versions.kotlin}",
+                    kotlin_jdk       : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+            ]
+    ]
+
+    repositories {
+        jcenter()
+        google()
+        maven { url 'https://www.jitpack.io' }
+        maven { url 'https://maven.google.com'}
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        maven { url 'http://developer.huawei.com/repo/' }
+        maven { url 'https://dl.bintray.com/umsdk/release' }
+    }
+    dependencies {
+        classpath deps.dependencies.gradle
+        classpath deps.kotlin.gradle_plugin
+        classpath deps.kotlin.gradle_extensions
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'com.github.LianjiaTech:gson-plugin:2.1.0'
+//        classpath 'com.novoda:bintray-release:0.9.1'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://www.jitpack.io' }
+        google()
+        // 支付宝 SDK AAR 包所需的配置
+        flatDir {
+            dirs 'libs'
+        }
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        maven { url "https://jitpack.io" }
+        maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
+        maven { url 'https://dl.bintray.com/umsdk/release' }
+        maven { url 'http://developer.huawei.com/repo/' }
+        jcenter(){url 'http://jcenter.bintray.com/'}
+        maven {url 'http://developer.huawei.com/repo'}
+        google()
+        mavenLocal()
+        //这里是 LeanCloud 的包仓库
+        maven {
+            url "http://mvn.leancloud.cn/nexus/content/repositories/public"
+        }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        mavenCentral()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
