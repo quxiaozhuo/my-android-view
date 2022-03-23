@@ -4,23 +4,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.net.http.SslError;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.webkit.DownloadListener;
-import android.webkit.SslErrorHandler;
-import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import androidx.annotation.Nullable;
+
+import com.tencent.smtt.export.external.interfaces.SslError;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
+import com.tencent.smtt.export.external.interfaces.WebResourceError;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
+import com.tencent.smtt.sdk.DownloadListener;
+import com.tencent.smtt.sdk.ValueCallback;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 
 /**
@@ -48,8 +49,9 @@ public class BaseWebView extends WVJBWebView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        if (mOnScrollChangeListener != null)
+        if (mOnScrollChangeListener != null) {
             mOnScrollChangeListener.onScrollChanged(this, l, t, oldl, oldt);
+        }
     }
 
     private OnScrollChangeListener mOnScrollChangeListener;
@@ -122,12 +124,12 @@ public class BaseWebView extends WVJBWebView {
         webSetting.setJavaScriptEnabled(true);
         webSetting.setJavaScriptCanOpenWindowsAutomatically(true);
         webSetting.setAllowFileAccess(true);
-        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+//        webSetting.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
         webSetting.setSupportZoom(false);
         webSetting.setBuiltInZoomControls(false);
         webSetting.setDisplayZoomControls(false);
         webSetting.setDefaultTextEncodingName("utf-8"); // 设置默认编码格式
-        webSetting.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);//高版本https问题
+        webSetting.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);//高版本https问题
         webSetting.setLoadsImagesAutomatically(true); // 自动加载图片
         webSetting.setJavaScriptCanOpenWindowsAutomatically(true);
         webSetting.setUseWideViewPort(true);
@@ -172,14 +174,15 @@ public class BaseWebView extends WVJBWebView {
                 }
             }
 
-
             //https的处理方式
             @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                super.onReceivedSslError(view, handler, error);
+            public void onReceivedSslError(WebView webView, SslErrorHandler sslErrorHandler, SslError sslError) {
+                super.onReceivedSslError(webView, sslErrorHandler, sslError);
                 Log.e("web======", "onReceivedSslError");
-                handler.proceed();
+                sslErrorHandler.proceed();
             }
+
+
 
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
@@ -207,8 +210,9 @@ public class BaseWebView extends WVJBWebView {
 
             // For Android 3.0+
             public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
-                if (mWebInterface != null)
+                if (mWebInterface != null) {
                     mWebInterface.openFileChooser(uploadMsg);
+                }
             }
 
             // For Android < 3.0
@@ -219,6 +223,7 @@ public class BaseWebView extends WVJBWebView {
             }
 
             // For Android  > 4.1.1
+            @Override
             public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
                 if (mWebInterface != null) {
                     mWebInterface.openFileChooser(uploadMsg);

@@ -17,25 +17,27 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.ConsoleMessage;
-import android.webkit.CookieManager;
 import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
-import android.webkit.JsPromptResult;
-import android.webkit.JsResult;
-import android.webkit.PermissionRequest;
-import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebStorage;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import androidx.annotation.Keep;
 
 import com.blankj.utilcode.util.GsonUtils;
+import com.tencent.smtt.export.external.interfaces.ConsoleMessage;
+import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
+import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient;
+import com.tencent.smtt.export.external.interfaces.JsPromptResult;
+import com.tencent.smtt.export.external.interfaces.JsResult;
+import com.tencent.smtt.export.external.interfaces.PermissionRequest;
+import com.tencent.smtt.sdk.CookieManager;
+import com.tencent.smtt.sdk.ValueCallback;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebStorage;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -300,7 +302,7 @@ public class WVJBWebView extends WebView {
         }
 
         @Override
-        public void onShowCustomView(View view, CustomViewCallback callback) {
+        public void onShowCustomView(View view, IX5WebChromeClient.CustomViewCallback callback) {
             if (webChromeClient != null) {
                 webChromeClient.onShowCustomView(view, callback);
             } else {
@@ -309,9 +311,10 @@ public class WVJBWebView extends WebView {
         }
 
 
+        @Override
         @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
         public void onShowCustomView(View view, int requestedOrientation,
-                                     CustomViewCallback callback) {
+                                     IX5WebChromeClient.CustomViewCallback callback) {
             if (webChromeClient != null) {
                 webChromeClient.onShowCustomView(view, requestedOrientation, callback);
             } else {
@@ -502,13 +505,15 @@ public class WVJBWebView extends WebView {
         }
 
         @Override
-        public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+        public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissionsCallback callback) {
             if (webChromeClient != null) {
                 webChromeClient.onGeolocationPermissionsShowPrompt(origin, callback);
             } else {
                 super.onGeolocationPermissionsShowPrompt(origin, callback);
             }
+
         }
+
 
         @Override
         public void onGeolocationPermissionsHidePrompt() {
@@ -549,14 +554,15 @@ public class WVJBWebView extends WebView {
             return super.onJsTimeout();
         }
 
-        @Override
-        public void onConsoleMessage(String message, int lineNumber, String sourceID) {
-            if (webChromeClient != null) {
-                webChromeClient.onConsoleMessage(message, lineNumber, sourceID);
-            } else {
-                super.onConsoleMessage(message, lineNumber, sourceID);
-            }
-        }
+
+//        @Override
+//        public void onConsoleMessage(String message, int lineNumber, String sourceID) {
+//            if (webChromeClient != null) {
+//                webChromeClient.onConsoleMessage(message, lineNumber, sourceID);
+//            } else {
+//                super.onConsoleMessage(message, lineNumber, sourceID);
+//            }
+//        }
 
         @Override
         public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
@@ -664,7 +670,7 @@ public class WVJBWebView extends WebView {
 //        settings.setDomStorageEnabled(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().setAcceptThirdPartyCookies(this, true);
-            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+            settings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
         settings.setAllowFileAccess(false);
         settings.setAppCacheEnabled(false);
