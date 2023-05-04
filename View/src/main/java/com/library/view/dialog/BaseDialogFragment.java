@@ -23,9 +23,6 @@ import com.library.view.R;
 
 /**
  * DialogFragment 实现沉浸式的基类
- *
- * @author geyifeng
- * @date 2017 /8/26
  */
 public abstract class BaseDialogFragment<V extends ViewDataBinding> extends DialogFragment {
 

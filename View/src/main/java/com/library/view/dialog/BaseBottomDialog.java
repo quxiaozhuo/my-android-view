@@ -14,6 +14,10 @@ public abstract class BaseBottomDialog<V extends ViewDataBinding> extends BaseDi
         super(context, R.style.bottom_dialog_style);
     }
 
+    public BaseBottomDialog(Context context, int themeResId) {
+        super(context, themeResId);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         gravity = Gravity.BOTTOM;
