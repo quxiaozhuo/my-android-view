@@ -47,7 +47,6 @@ dependencies {
     api 'com.tencent.tbs:tbssdk:44085'
 
     //RecyclerView
-    api 'com.google.android:flexbox:2.0.1'//不规则布局
     api 'com.github.AItsuki:SwipeMenuRecyclerView:1.1.1'//RecyclerView侧滑菜单，滑动删除，长按拖拽
     api 'org.jsoup:jsoup:1.10.1'//WebViewJavascriptBridge
 //    api 'me.jessyan:autosize:1.1.2'
